@@ -1,0 +1,265 @@
+[
+  {
+    "testName": "Пустой JSON-объект",
+    "payload": {},
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Отсутствует обязательное поле: firstname",
+    "payload": {
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Отсутствует обязательное поле: lastname",
+    "payload": {
+      "firstname": "Jim",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Отсутствует обязательное поле: totalprice",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Отсутствует обязательное поле: depositpaid",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Отсутствует обязательное поле: bookingdates",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Отсутствует обязательное поле: additionalneeds",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      }
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Пустая строка в поле: firstname",
+    "payload": {
+      "firstname": "",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Пустая строка в поле: lastname",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Пустая строка в поле: additionalneeds",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": ""
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Неверный тип: totalprice является строкой",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": "сто рублей",
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Неверный тип: firstname является числом",
+    "payload": {
+      "firstname": 12345,
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Неверный тип: depositpaid является строкой",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": "yes",
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Негативная цена: totalprice < 0",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": -500,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Логика дат: checkin позже чем checkout",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-31",
+        "checkout": "2026-07-17"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Невалидный формат даты (DD.MM.YYYY)",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "17.07.2026",
+        "checkout": "31.07.2026"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Поле firstname равно null",
+    "payload": {
+      "firstname": null,
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Поле totalprice равно null",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": null,
+      "depositpaid": true,
+      "bookingdates": {
+        "checkin": "2026-07-17",
+        "checkout": "2026-07-31"
+      },
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  },
+  {
+    "testName": "Поле bookingdates равно null",
+    "payload": {
+      "firstname": "Jim",
+      "lastname": "Brown",
+      "totalprice": 111,
+      "depositpaid": true,
+      "bookingdates": null,
+      "additionalneeds": "Breakfast"
+    },
+    "expectedStatus": 400
+  }
+]
