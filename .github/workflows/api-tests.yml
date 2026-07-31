@@ -1,31 +1,30 @@
 name: API Tests
 
 on:
-    push:
-        branches:
-            - main
-    workflow_dispatch:
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: action/setup-node@v4
-              with:
-                node-version: '20'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-            - name: Install Newman
-              run: npm install -g newman newman-reporter-htmlextra
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
 
-            - name: Run full regression
-              run: |
-                newman run collection/RestfulBooker.postman_collection.json \
-                -e collection/RestfulBooker.postman_environment.json \
-                -r cli,htmlextra \
-                --reporter-htmlextra-export reports/full-run.html \
-                --reporter-htmlextra-title "Restful Booker - Full Regression Run" \
-                --reporter-htmlextra-darkTheme
+      - name: Run full regression
+        run: |
+          newman run collection/RestfulBooker.postman_collection.json \
+            -e collection/RestfulBooker.postman_environment.json \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export reports/full-run.html \
+            --reporter-htmlextra-title "Restful Booker — Full Regression" \
+            --reporter-htmlextra-darkTheme
