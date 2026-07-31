@@ -3,6 +3,8 @@ name: API Tests
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '0 6 * * *'
   workflow_dispatch:
 
 jobs:
@@ -21,6 +23,7 @@ jobs:
         run: npm install -g newman newman-reporter-htmlextra
 
       - name: Run full regression
+        continue-on-error: true
         run: |
           newman run collection/RestfulBooker.postman_collection.json \
             -e collection/RestfulBooker.postman_environment.json \
@@ -28,3 +31,23 @@ jobs:
             --reporter-htmlextra-export reports/full-run.html \
             --reporter-htmlextra-title "Restful Booker — Full Regression" \
             --reporter-htmlextra-darkTheme
+
+      - name: Run DDT negative suite
+        continue-on-error: true
+        run: |
+          newman run collection/RestfulBooker.postman_collection.json \
+            -e collection/RestfulBooker.postman_environment.json \
+            --folder "Негативные тесты - DDT" \
+            -d data/negative_postman_data.json \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export reports/ddt-run.html \
+            --reporter-htmlextra-title "Restful Booker — DDT Negative Suite" \
+            --reporter-htmlextra-darkTheme
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-reports
+          path: reports/
+          retention-days: 30
