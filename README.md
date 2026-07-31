@@ -8,6 +8,8 @@
 
 ![Run summary](reports/runner-summary.jpg)
 
+[![API Tests](https://github.com/kotysheff/restful-booker-api-tests/actions/workflows/api-tests.yml/badge.svg)](https://github.com/kotysheff/restful-booker-api-tests/actions/workflows/api-tests.yml)
+
 ---
 
 ## Результаты
