@@ -26,13 +26,13 @@
 
 ## Найденные дефекты
 
-| ID | Severity | Заголовок | Эндпоинт |
-|----|----------|-----------|----------|
-| [BUG-01](docs/BUGS.md#bug-01) | Major | Фильтр по `checkin` не возвращает созданную бронь | `GET /booking` |
-| [BUG-02](docs/BUGS.md#bug-02) | Major | `500 Internal Server Error` при невалидном формате даты в query | `GET /booking` |
-| [BUG-03](docs/BUGS.md#bug-03) | Major | `500 Internal Server Error` при передаче числа в `firstname` | `PUT /booking/:id` |
-| [BUG-04](docs/BUGS.md#bug-04) | Major | Отсутствует валидация тела запроса при обновлении брони | `PUT`, `PATCH /booking/:id` |
-| [BUG-05](docs/BUGS.md#bug-05) | Medium | `405 Method Not Allowed` вместо `404 Not Found` при несуществующем ID | `PATCH`, `DELETE /booking/:id` |
+| ID | Severity | Заголовок | Эндпоинт | Issue |
+|----|----------|-----------|----------|-------|
+| [BUG-01](docs/BUGS.md#bug-01) | Major | Фильтр по `checkin` не возвращает созданную бронь | `GET /booking` | [#1](https://github.com/kotysheff/restful-booker-api-tests/issues/1) |
+| [BUG-02](docs/BUGS.md#bug-02) | Major | `500 Internal Server Error` при невалидном формате даты в query | `GET /booking` | [#2](https://github.com/kotysheff/restful-booker-api-tests/issues/2) |
+| [BUG-03](docs/BUGS.md#bug-03) | Major | `500 Internal Server Error` при передаче числа в `firstname` | `PUT /booking/:id` | [#3](https://github.com/kotysheff/restful-booker-api-tests/issues/3) | 
+| [BUG-04](docs/BUGS.md#bug-04) | Major | Отсутствует валидация тела запроса при обновлении брони | `PUT`, `PATCH /booking/:id` | [#4](https://github.com/kotysheff/restful-booker-api-tests/issues/4) | 
+| [BUG-05](docs/BUGS.md#bug-05) | Medium | `405 Method Not Allowed` вместо `404 Not Found` при несуществующем ID | `PATCH`, `DELETE /booking/:id` | [#5](https://github.com/kotysheff/restful-booker-api-tests/issues/5) | 
 
 Полные баг-репорты с предусловиями, шагами воспроизведения и ожидаемым результатом — в [docs/BUGS.md](docs/BUGS.md).
 
