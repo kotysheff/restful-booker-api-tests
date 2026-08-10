@@ -7,6 +7,15 @@ on:
     - cron: '0 6 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -44,10 +53,78 @@ jobs:
             --reporter-htmlextra-title "Restful Booker — DDT Negative Suite" \
             --reporter-htmlextra-darkTheme
 
-      - name: Upload reports
+      - name: Build index page
+        if: always()
+        run: |
+          RUN_DATE=$(date -u '+%d.%m.%Y %H:%M UTC')
+          cat > reports/index.html <<HTML
+          <!DOCTYPE html>
+          <html lang="ru">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Restful Booker API — отчёты о тестировании</title>
+            <style>
+              body { background:#1a1a1a; color:#e8e8e8; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; max-width:720px; margin:0 auto; padding:48px 24px; line-height:1.6; }
+              h1 { font-size:24px; margin-bottom:8px; }
+              .meta { color:#888; font-size:14px; margin-bottom:32px; }
+              a.card { display:block; background:#252525; border:1px solid #333; border-radius:8px; padding:20px; margin-bottom:16px; text-decoration:none; color:#e8e8e8; transition:border-color .15s; }
+              a.card:hover { border-color:#4a9eff; }
+              a.card .title { font-weight:600; margin-bottom:4px; }
+              a.card .desc { color:#999; font-size:14px; }
+              .note { background:#252525; border-left:3px solid #d29922; padding:16px 20px; border-radius:4px; margin-top:32px; font-size:14px; }
+              footer { margin-top:40px; color:#666; font-size:13px; }
+              footer a { color:#4a9eff; }
+            </style>
+          </head>
+          <body>
+            <h1>Restful Booker API — отчёты о тестировании</h1>
+            <div class="meta">Последний прогон: $RUN_DATE</div>
+
+            <a class="card" href="full-run.html">
+              <div class="title">Полный регрессионный прогон</div>
+              <div class="desc">8 операций API, 67 запросов, ~525 проверок</div>
+            </a>
+
+            <a class="card" href="ddt-run.html">
+              <div class="title">Data-driven негативный набор</div>
+              <div class="desc">19 кейсов валидации POST /booking</div>
+            </a>
+
+            <div class="note">
+              Часть проверок падает штатно — это подтверждённые дефекты бэкенда.
+              Полное описание в <a href="https://github.com/kotysheff/restful-booker-api-tests/blob/main/docs/BUGS.md" style="color:#4a9eff">docs/BUGS.md</a>.
+            </div>
+
+            <footer>
+              Отчёты обновляются автоматически при каждом коммите и ежедневно в 06:00 UTC ·
+              <a href="https://github.com/kotysheff/restful-booker-api-tests">Репозиторий</a>
+            </footer>
+          </body>
+          </html>
+          HTML
+
+      - name: Upload reports as artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: newman-reports
           path: reports/
           retention-days: 30
+
+      - name: Upload reports for Pages
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: reports/
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
